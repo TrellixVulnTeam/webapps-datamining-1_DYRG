@@ -3,6 +3,13 @@ import numpy as np
 
 st.title('Aplikasi Web Datamining')
 st.write("""
-# Menggunakan beberapa algoritma dan dataset terbaik
+# Algoritma KNN, SVM dan Random Forest
 Mana yang terbaik??
 """)
+
+nama_dataset = st.sidebar.selectbox(
+    'Pilih Dataset',
+    ('Bunga IRIS','Kanker Payudara','Digit Angka')
+)
+
+st.write(f"## Dataset {nama_dataset}")
