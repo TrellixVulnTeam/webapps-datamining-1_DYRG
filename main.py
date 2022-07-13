@@ -1,7 +1,16 @@
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 import streamlit as st
 import numpy as np
 
 from sklearn import datasets #panggil lib scikitlearn
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 st.title('Aplikasi Web Data Mining')
 st.write("""
@@ -60,3 +69,28 @@ def tambah_parameter(nama_algortima):
 
 # panggil fungsi params berdasarkan algoritma yg dipilih
 params = tambah_parameter(algoritma)
+
+# bikin fungsi pilih_klasifikasi
+def pilih_klasifikasi(nama_algoritma, params):
+    algo = None
+    if nama_algoritma == 'KNN':
+        algo = KNeighborsClassifier(n_neighbors=params['K'])
+    elif nama_algoritma == 'SVM':
+        algo = SVC(C=params['C'])
+    else:
+        algo = RandomForestClassifier(n_estimators=params['n_estimators'], max_depth=params['max_depth'], random_state=1234)
+    return algo
+
+# tampilkan hasil algoritma sesuai parameter
+algo = pilih_klasifikasi(algoritma, params)
+
+### PROSES KLASIFIKASI ###
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=1234) 
+
+algo.fit(x_train, y_train)
+y_pred = algo.predict(x_test) #panggil fungsi prediksi
+
+acc = accuracy_score(y_test, y_pred)
+
+st.write(f'Algoritma = {algoritma}')
+st.write(f'Akurasi =', acc)
